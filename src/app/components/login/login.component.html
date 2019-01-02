@@ -1,0 +1,27 @@
+{{message}}
+<div id="main">
+  <p>{{question}}</p>
+  <form action="{{route}}" method="post" autocomplete="off">
+    <input type="text" name="r" size="45">
+    <input id="hidden-token" type="hidden" name="t">
+    <input type="submit">
+  </form>
+</div>
+
+<div id="leaderboard">
+  <div id="leaders-wrapper">
+    <div id="leaders">
+      <h1>Leaderboard</h1>
+      <div *ngFor="let rank of leaderboard">
+        <h2>{{rank.key}}</h2>
+        <div *ngFor="let entry of rank.ordered">{{entry.name}} at {{entry.at}}</div>
+    </div>
+  </div>
+
+  <div id="newest-wrapper">
+    <div id="newest">
+      <h1>Newest</h1>
+      <div *ngFor="let entry of newest">{{entry.name}} at {{entry.at}}</div>
+    </div>
+  </div>
+</div>
