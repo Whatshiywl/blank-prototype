@@ -1,6 +1,10 @@
 {
   "name": "blank-prototype",
   "version": "0.0.0",
+  "engines": {
+    "node": "8.9.4",
+    "npm": "6.2.0"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
