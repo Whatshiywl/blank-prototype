@@ -61,7 +61,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "blank-prototype:build"
+            "browserTarget": "blank-prototype:build",
+            "port": 9400
           },
           "configurations": {
             "production": {
