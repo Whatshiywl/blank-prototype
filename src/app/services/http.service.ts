@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { AppModule } from '../app.module';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class HttpService {
   ) { }
 
   getHelloWorld() {
-    return this.http.get('http://localhost:9000').map(res => res.text());
+    return this.http.get('http://localhost:9000/hello').map(res => res.text());
   }
 
 }
