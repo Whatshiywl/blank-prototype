@@ -20,6 +20,14 @@ export class HttpService {
     return this.get('leaderboard');
   }
 
+  getUserExists(username: string) {
+    return this.get(`user-exists?username=${username}`);
+  }
+
+  postLogin(username: string, hash: string) {
+    return this.post('login', {username, hash});
+  }
+
   private get(path: string, project?: (value: Response, index: number) => any) {
     let url = this.getURL(path);
     return this.http.get(url).map(project || (res => res.json()));

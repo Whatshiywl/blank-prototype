@@ -6,8 +6,8 @@
 <!-- {{username.value}} -->
 <!-- <input type="text" name="r" size="45" [formControl]="username"> -->
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" action="{{route}}" method="post" autocomplete="off">
-  <input formControlName="username" type="text" name="r" size="45" placeholder="username" required>
-  <input formControlName="password" type="password" name="p" size="45" placeholder="password"
+  <input id="username" formControlName="username" type="text" name="r" size="45" placeholder="username" required>
+  <input id="password" formControlName="password" type="password" name="p" size="45" placeholder="password"
   (mouseover)="showWarning()" (mouseout)="hideWarning()" (focus)="showWarning()" (blur)="hideWarning()">
   <div id="password-warning" hidden="true">
     <p>

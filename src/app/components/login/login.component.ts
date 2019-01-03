@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import * as $ from 'jquery';
+import * as CryptoJS from 'crypto-js';
 
+import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,6 +23,8 @@ export class LoginComponent implements OnInit {
     password: ['']
   });
 
+  existanceData: {exists: boolean, password: boolean} = {exists: false, password: false};
+
   constructor(
     private httpService: HttpService,
     private fb: FormBuilder
@@ -28,17 +32,40 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.httpService.getHelloWorld().subscribe(msg => this.message = msg);
+
+    this.loginForm.get('username').valueChanges.pipe(debounceTime(500)).subscribe(user => {
+      this.httpService.getUserExists(user).subscribe(data => {
+        this.existanceData = data;
+        if(this.existanceData.password) {
+          this.hideWarning();
+          $('#password').prop('required', true);
+          this.loginForm.get('password').setValidators(Validators.required);
+          this.loginForm.get('password').updateValueAndValidity();
+        } else {
+          $('#password').prop('required', false);
+          this.loginForm.get('password').clearValidators();
+          this.loginForm.get('password').updateValueAndValidity();
+        }
+      }, err => {
+        console.error(err);
+      });
+    });
+
     this.loginForm.get('password').valueChanges.subscribe(pass => {
       if(pass) this.hideWarning();
     });
   }
 
   onSubmit() {
-    console.log('submit', this.loginForm.value);
+    let hash = CryptoJS.SHA256(this.loginForm.get('password').value).toString();
+    this.httpService.postLogin(this.loginForm.get('username').value, hash).subscribe(res => {
+      console.log(res);
+    });
   }
 
   showWarning() {
     if(this.passWarningState != 'hidden') return;
+    if(this.existanceData.password) return;
     this.passWarningState = 'animating';
     $('#password-warning').css('height', '10px').show().animate({height: "150px"}, 600, 'swing', () => {
       this.passWarningState = 'shown';
