@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://blank-prototype-express.com'
+  apiURL: 'https://blank-prototype-express.herokuapp.com/api/v1'
 };
