@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -7,38 +8,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LeaderboardComponent implements OnInit {
 
-  leaderboard = [
-    {
-      key: 3,
-      ordered: [
-        {name: 'me', at: 3425123451}
-      ]
-    },
-    {
-      key: 1,
-      ordered: [
-        {name: 'myself', at: 5761342},
-        {name: 'and', at: 54269807234}
-      ]
-    },
-    {
-      key: 0,
-      ordered: [
-        {name: 'irene', at: 985743627}
-      ]
-    }
-  ];
+  leaderboard: {
+    leaders: {
+      key: number, 
+      ordered: {
+        name: string, 
+        at: string
+      }[]
+    }[],
+    newest: []
+  } = {
+    leaders: [],
+    newest: []
+  };
 
-  newest = [
-    {name: 'mama', at: 4362454},
-    {name: 'killed', at: 654373},
-    {name: 'man', at: 5643674}
-  ];
-
-  constructor() { }
+  constructor(
+    private httpService: HttpService
+  ) { }
 
   ngOnInit() {
-    console.log('leaderboard init')
+    this.httpService.getLeaderboard().subscribe(leaderboard => {
+      this.leaderboard = leaderboard;
+    }, err => {
+      console.error(err);
+      alert('Error loading leaderboard!');
+    });
   }
 
 }

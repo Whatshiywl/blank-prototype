@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -17,10 +16,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private httpService: HttpService
-  ) {
-    let apiUrl = environment.apiUrl;
-    console.log(apiUrl);
-  }
+  ) { }
 
   ngOnInit() {
     this.httpService.getHelloWorld().subscribe(msg => this.message = msg);
