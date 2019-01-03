@@ -8,6 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "homol": "ng build && npm start",
+    "prod": "npm run heroku-postbuild && npm start",
     "heroku-postbuild": "ng build --aot --prod=true"
   },
   "private": true,
