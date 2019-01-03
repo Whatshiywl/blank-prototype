@@ -1,7 +1,26 @@
 {{message}}
-<p>{{question}}</p>
-<form action="{{route}}" method="post" autocomplete="off">
-  <input type="text" name="r" size="45">
-  <input id="hidden-token" type="hidden" name="t">
-  <input type="submit">
+<pre>Welcome to Blank
+  This is a prototype
+  Please login
+</pre>
+<!-- {{username.value}} -->
+<!-- <input type="text" name="r" size="45" [formControl]="username"> -->
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" action="{{route}}" method="post" autocomplete="off">
+  <input id="username" formControlName="username" type="text" name="r" size="45" placeholder="username" required>
+  <input id="password" formControlName="password" type="password" name="p" size="45" placeholder="password"
+  (mouseover)="showWarning()" (mouseout)="hideWarning()" (focus)="showWarning()" (blur)="hideWarning()">
+  <div id="password-warning" hidden="true">
+    <p>
+      <br>
+      Creating a password is optional but advised, 
+      as certain features such as having your name on the leaderboard and 
+      picking up where you left off are only accessible to password-protected users.
+      <br><br>
+      However, if you choose to create a password, 
+      it is strongly suggested that you do not recycle any of your passwords already in use, 
+      as the passwords stored here are not completely secured.
+    </p>
+  </div>
+  <!-- <input id="hidden-token" type="hidden" name="t"> -->
+  <input type="submit" [disabled]="!loginForm.valid">
 </form>
