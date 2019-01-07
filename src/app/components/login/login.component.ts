@@ -23,6 +23,8 @@ export class LoginComponent implements OnInit {
     password: ['']
   });
 
+  canSubmit = true;
+
   existanceData: {exists: boolean, password: boolean} = {exists: false, password: false};
 
   constructor(
@@ -57,10 +59,23 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    if(!this.canSubmit) return;
+    this.canSubmit = false;
+    let username = this.loginForm.get('username').value;
     let hash = CryptoJS.SHA256(this.loginForm.get('password').value).toString();
-    this.httpService.postLogin(this.loginForm.get('username').value, hash).subscribe(res => {
+    this.httpService.postLogin(username, hash).subscribe(res => {
       console.log(res);
-    });
+      this.loginForm.reset();
+      $('#username').focus();
+      if(res.err) {
+        let button = $("#submit-btn");
+        button.toggleClass('submit-error');
+        setTimeout(() => {
+          button.toggleClass('submit-error');
+          this.canSubmit = true;
+        }, 1000);
+      } else this.canSubmit = true;
+    }, err => console.error(err));
   }
 
   showWarning() {

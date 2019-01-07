@@ -93,4 +93,10 @@ input[type=submit] {
       color: white;
     }
   }
+
+  &.submit-error {
+    background-color: #ff4444;
+    border-color: #ff4444;
+  }
+
 }
