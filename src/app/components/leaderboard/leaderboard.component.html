@@ -3,7 +3,7 @@
     <h1>Leaderboard</h1>
     <div *ngFor="let rank of leaderboard.leaders">
       <h2>{{rank.key}}</h2>
-      <div *ngFor="let entry of rank.ordered">{{entry.name}} at {{entry.at}}</div>
+      <div *ngFor="let entry of rank.ordered">{{entry.username}} at {{entry.at}}</div>
     </div>
   </div>
 </div>
@@ -11,6 +11,6 @@
 <div id="newest-wrapper">
   <div id="newest">
     <h1>Newest</h1>
-    <div *ngFor="let entry of leaderboard.newest">{{entry.name}} at {{entry.at}}</div>
+    <div *ngFor="let entry of leaderboard.newest">{{entry.username}} at {{entry.at}}</div>
   </div>
 </div>
