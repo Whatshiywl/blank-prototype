@@ -67,7 +67,14 @@ export class LoginComponent implements OnInit {
     if(this.passWarningState != 'hidden') return;
     if(this.existanceData.password) return;
     this.passWarningState = 'animating';
-    $('#password-warning').css('height', '10px').show().animate({height: "150px"}, 600, 'swing', () => {
+    let id = '#password-warning';
+    let warning = $(id);
+    warning.css('height', '10px').show();
+    let target = $(`${id} p`).outerHeight();
+    warning
+    .animate({
+      height: `${target}px`
+    }, 600, 'swing', () => {
       this.passWarningState = 'shown';
     });
   }
@@ -75,7 +82,10 @@ export class LoginComponent implements OnInit {
   hideWarning() {
     if(this.passWarningState != 'shown') return;
     this.passWarningState = 'animating';
-    $('#password-warning').css('height', '150px').animate({height: "10px"}, 600, 'swing', () => {
+    $('#password-warning')
+    .animate({
+      height: "10px"
+    }, 600, 'swing', () => {
       $('#password-warning').hide();
       this.passWarningState = 'hidden';
     });
