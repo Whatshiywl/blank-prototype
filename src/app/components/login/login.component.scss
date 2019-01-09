@@ -1,3 +1,19 @@
+#form-wrapper {
+    // background-color: red;
+    opacity: 1;
+}
+
+#welcome {
+    font-family: inherit;
+    font-size: 24px;
+    text-align: center;
+    opacity: 1;
+
+    & p {
+        opacity: 0;
+    }
+}
+
 #password-warning {
     background-color: orange;
     border: 1px solid darkgoldenrod;
@@ -5,10 +21,19 @@
     padding: 10px;
     margin: -30px 30px 0px 30px;
     word-wrap: normal;
+
+    & p {
+        padding-top: 10px;
+    }
+}
+
+form {
+    opacity: 0;
 }
 
 p {
     font: inherit;
     text-align: inherit;
     word-wrap: normal;
+    padding: 0px;
 }

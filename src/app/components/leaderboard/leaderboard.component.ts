@@ -27,12 +27,20 @@ export class LeaderboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('leader init')
     this.httpService.getLeaderboard().subscribe(leaderboard => {
       this.leaderboard = leaderboard;
     }, err => {
       console.error(err);
       alert('Error loading leaderboard!');
     });
+
+    setTimeout(() => {
+      $('#leaderboard-wrapper').animate({
+        opacity: 1
+      }, 2000, 'swing');
+    }, 5000);
+
   }
 
 }
