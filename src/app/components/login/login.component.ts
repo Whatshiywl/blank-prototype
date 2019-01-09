@@ -5,14 +5,13 @@ import * as $ from 'jquery';
 import * as CryptoJS from 'crypto-js';
 
 import { debounceTime } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  route = '/';
 
   passWarningState = 'animating';
 
@@ -27,7 +26,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private httpService: HttpService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -82,19 +82,29 @@ export class LoginComponent implements OnInit {
     this.canSubmit = false;
     let username = this.loginForm.get('username').value;
     let hash = CryptoJS.SHA256(this.loginForm.get('password').value).toString();
+
+    const loginFailed = err => {
+      console.error(err);
+      let button = $("#submit-btn");
+      button.toggleClass('submit-error');
+      setTimeout(() => {
+        button.toggleClass('submit-error');
+        this.canSubmit = true;
+      }, 1000);
+    }
+
+    const loginSuccess = token => {
+      this.canSubmit = true;
+      localStorage.setItem('token', token);
+      this.httpService.getRoute(this.route.routeConfig.path);
+    }
+
     this.httpService.postLogin(username, hash).subscribe(res => {
-      console.log(res);
       this.loginForm.reset();
       $('#username').focus();
-      if(res.err) {
-        let button = $("#submit-btn");
-        button.toggleClass('submit-error');
-        setTimeout(() => {
-          button.toggleClass('submit-error');
-          this.canSubmit = true;
-        }, 1000);
-      } else this.canSubmit = true;
-    }, err => console.error(err));
+      if(res.err || !res.token) loginFailed(res.err);
+      else loginSuccess(res.token);
+    }, loginFailed);
   }
 
   showWarning() {
