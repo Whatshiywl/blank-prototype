@@ -12,11 +12,9 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
 
-  message: string = 'wait for it...';
-
   route = '/';
 
-  passWarningState = 'hidden';
+  passWarningState = 'animating';
 
   loginForm = this.fb.group({
     username: ['', Validators.required],
@@ -33,7 +31,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.httpService.getHelloWorld().subscribe(msg => this.message = msg);
+    this.easeInAnimations();
 
     this.loginForm.get('username').valueChanges.pipe(debounceTime(500)).subscribe(user => {
       this.httpService.getUserExists(user).subscribe(data => {
@@ -43,10 +41,12 @@ export class LoginComponent implements OnInit {
           $('#password').prop('required', true);
           this.loginForm.get('password').setValidators(Validators.required);
           this.loginForm.get('password').updateValueAndValidity();
+          $('#password').attr('placeholder', 'Password');
         } else {
           $('#password').prop('required', false);
           this.loginForm.get('password').clearValidators();
           this.loginForm.get('password').updateValueAndValidity();
+          $('#password').attr('placeholder', 'Password (optional)');
         }
       }, err => {
         console.error(err);
@@ -56,6 +56,25 @@ export class LoginComponent implements OnInit {
     this.loginForm.get('password').valueChanges.subscribe(pass => {
       if(pass) this.hideWarning();
     });
+  }
+
+  private easyInShow(id, wait, duration, cb?) {
+    setTimeout(() => {
+      $(id).animate({
+        opacity: 1
+      }, duration, 'swing', cb);
+    }, wait);
+  }
+
+  easeInAnimations() {
+
+    this.easyInShow('#welcome-0', 1500, 2000);
+    this.easyInShow('#welcome-1', 2000, 2000);
+    this.easyInShow('#welcome-2', 2500, 2000);
+    this.easyInShow('#login-form', 4000, 4000, () => {
+      this.passWarningState = 'hidden';
+    });
+
   }
 
   onSubmit() {

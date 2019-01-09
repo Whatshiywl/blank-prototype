@@ -5,6 +5,9 @@
     margin: auto;
     padding: 10px;
 }
+#leaderboard-wrapper {
+    opacity: 0;
+}
 
 #leaders-wrapper {
     width: 100%;
@@ -30,9 +33,17 @@
         float: left;
         border-bottom: none;
         border-right: 2px solid darkgray;
+
+        & #leaders {
+            margin-left: 10px;
+        }
     }
     
     #newest-wrapper {
         margin-left: 50%;
+
+        & #newest {
+            margin-left: 10px;
+        }
     }
 }
