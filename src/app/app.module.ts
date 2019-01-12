@@ -8,6 +8,9 @@ import { HttpService } from './services/http.service';
 import { HttpModule } from '@angular/http';
 import { QuestionComponent } from './components/question/question.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
+import { UrlSerializer } from '@angular/router';
+import { CustomUrlSerializer } from './custom-url-serializer.service';
+import { QuestionGuard } from './components/question/question.guard';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,12 @@ import { LeaderboardComponent } from './components/leaderboard/leaderboard.compo
     AppRoutingModule
   ],
   providers: [
-    HttpService
+    HttpService,
+    QuestionGuard
+    // {
+    //   provide: UrlSerializer,
+    //   useClass: CustomUrlSerializer
+    // }
   ],
   bootstrap: [AppComponent]
 })

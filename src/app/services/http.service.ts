@@ -24,6 +24,16 @@ export class HttpService {
     return this.get(`user-exists?username=${username}`);
   }
 
+  getValidateRoute(route: string, routeToken: string) {
+    let token = localStorage.getItem('token');
+    return this.get(`validate-route?from=${route}&route-token=${routeToken}&token=${token}`);
+  }
+
+  postAnswer(from: string, answer?: string) {
+    let token = localStorage.getItem('token');
+    return this.post(`post-answer`, {from, answer, token});
+  }
+
   postLogin(username: string, hash: string) {
     return this.post('login', {username, hash});
   }

@@ -5,14 +5,13 @@ import * as $ from 'jquery';
 import * as CryptoJS from 'crypto-js';
 
 import { debounceTime } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  route = '/';
 
   passWarningState = 'animating';
 
@@ -27,10 +26,15 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private httpService: HttpService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
+
+    localStorage.clear();
+
     this.easeInAnimations();
 
     this.loginForm.get('username').valueChanges.pipe(debounceTime(500)).subscribe(user => {
@@ -68,6 +72,13 @@ export class LoginComponent implements OnInit {
 
   easeInAnimations() {
 
+    $('#border').css('width', '0%').css('margin-left', '50%');
+    setTimeout(() => {
+      $('#border').animate({
+        width: '100%',
+        marginLeft: '0%'
+      }, 800, 'swing');
+    }, 500);
     this.easyInShow('#welcome-0', 1500, 2000);
     this.easyInShow('#welcome-1', 2000, 2000);
     this.easyInShow('#welcome-2', 2500, 2000);
@@ -82,19 +93,32 @@ export class LoginComponent implements OnInit {
     this.canSubmit = false;
     let username = this.loginForm.get('username').value;
     let hash = CryptoJS.SHA256(this.loginForm.get('password').value).toString();
+
+    const loginFailed = err => {
+      console.error(err);
+      let button = $("#submit-btn");
+      button.toggleClass('submit-error');
+      setTimeout(() => {
+        button.toggleClass('submit-error');
+        this.canSubmit = true;
+      }, 1000);
+    }
+
+    const loginSuccess = token => {
+      this.canSubmit = true;
+      localStorage.setItem('token', token);
+      this.httpService.postAnswer(this.route.routeConfig.path).subscribe(res => {
+        localStorage.setItem('question', JSON.stringify(res));
+        this.router.navigate([`/${res.url}`]);
+      }, console.error);
+    }
+
     this.httpService.postLogin(username, hash).subscribe(res => {
-      console.log(res);
       this.loginForm.reset();
       $('#username').focus();
-      if(res.err) {
-        let button = $("#submit-btn");
-        button.toggleClass('submit-error');
-        setTimeout(() => {
-          button.toggleClass('submit-error');
-          this.canSubmit = true;
-        }, 1000);
-      } else this.canSubmit = true;
-    }, err => console.error(err));
+      if(res.err || !res.token) loginFailed(res.err);
+      else loginSuccess(res.token);
+    }, loginFailed);
   }
 
   showWarning() {
