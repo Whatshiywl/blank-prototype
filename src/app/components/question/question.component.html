@@ -1,6 +1,5 @@
 <p>{{question}}</p>
-<form method="post" autocomplete="off">
-  <input type="text" name="r" size="45">
-  <input id="hidden-token" type="hidden" name="t">
-  <input type="submit">
+<form id="answer-form" [formGroup]="answerForm" (ngSubmit)="onSubmit()" autocomplete="off">
+  <input id="answer" formControlName="answer" type="text" size="45">
+  <input id="submit-btn" type="submit">
 </form>

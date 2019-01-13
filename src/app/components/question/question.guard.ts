@@ -15,11 +15,9 @@ export class QuestionGuard implements CanActivate {
 
         let url = state.url.replace(/%3D/g, '=').substr(1);
         let equalsToAdd = url.length % 4;
-        if(equalsToAdd) url += equalsToAdd == 1 ? '=' : '==';
-        console.log('guarding', url)
+        if(equalsToAdd) url += equalsToAdd == 3 ? '=' : '==';
 
         const reject = () => {
-            console.log('reject')
             this.router.navigate(['/login']);
             return false;
         }

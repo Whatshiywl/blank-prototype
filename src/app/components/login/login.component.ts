@@ -60,6 +60,8 @@ export class LoginComponent implements OnInit {
     this.loginForm.get('password').valueChanges.subscribe(pass => {
       if(pass) this.hideWarning();
     });
+
+    $('#username').focus();
   }
 
   private easyInShow(id, wait, duration, cb?) {
@@ -72,13 +74,6 @@ export class LoginComponent implements OnInit {
 
   easeInAnimations() {
 
-    $('#border').css('width', '0%').css('margin-left', '50%');
-    setTimeout(() => {
-      $('#border').animate({
-        width: '100%',
-        marginLeft: '0%'
-      }, 800, 'swing');
-    }, 500);
     this.easyInShow('#welcome-0', 1500, 2000);
     this.easyInShow('#welcome-1', 2000, 2000);
     this.easyInShow('#welcome-2', 2500, 2000);
