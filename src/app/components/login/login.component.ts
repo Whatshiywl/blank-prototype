@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       this.httpService.getUserExists(user).subscribe(data => {
         this.existanceData = data;
         if(this.existanceData.password) {
-          this.hideWarning();
+          this.hideWarning('password-warning');
           $('#password').prop('required', true);
           this.loginForm.get('password').setValidators(Validators.required);
           this.loginForm.get('password').updateValueAndValidity();
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
     });
 
     this.loginForm.get('password').valueChanges.subscribe(pass => {
-      if(pass) this.hideWarning();
+      if(pass) this.hideWarning('password-warning');
     });
 
     $('#username').focus();
@@ -76,10 +76,10 @@ export class LoginComponent implements OnInit {
 
     this.easyInShow('#welcome-0', 1500, 2000);
     this.easyInShow('#welcome-1', 2000, 2000);
-    this.easyInShow('#welcome-2', 2500, 2000);
-    this.easyInShow('#login-form', 4000, 4000, () => {
+    this.easyInShow('#welcome-2', 2500, 2000, () => {
       this.passWarningState = 'hidden';
     });
+    this.easyInShow('#login-form', 4000, 4000);
 
   }
 
@@ -116,11 +116,11 @@ export class LoginComponent implements OnInit {
     }, loginFailed);
   }
 
-  showWarning() {
+  showWarning(id: string) {
     if(this.passWarningState != 'hidden') return;
     if(this.existanceData.password) return;
     this.passWarningState = 'animating';
-    let id = '#password-warning';
+    id = `#${id}`;
     let warning = $(id);
     warning.css('height', '10px').show();
     let target = $(`${id} p`).outerHeight();
@@ -132,14 +132,15 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  hideWarning() {
+  hideWarning(id: string) {
     if(this.passWarningState != 'shown') return;
     this.passWarningState = 'animating';
-    $('#password-warning')
+    id = `#${id}`;
+    $(id)
     .animate({
       height: "10px"
     }, 600, 'swing', () => {
-      $('#password-warning').hide();
+      $(id).hide();
       this.passWarningState = 'hidden';
     });
   }

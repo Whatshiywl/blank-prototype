@@ -4,25 +4,32 @@
     <p id="welcome-1">This is a prototype</p>
     <p id="welcome-2">Please login</p>
   </div>
-  <!-- {{username.value}} -->
-  <!-- <input type="text" name="r" size="45" [formControl]="username"> -->
   <form id="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
     <input id="username" formControlName="username" type="text" size="45" placeholder="Username" required>
     <input id="password" formControlName="password" type="password" name="p" size="45" placeholder="Password (optional)"
-    (mouseover)="showWarning()" (mouseout)="hideWarning()" (focus)="showWarning()" (blur)="hideWarning()">
-    <div id="password-warning" hidden="true">
-      <p>
+    (mouseover)="showWarning('password-warning')" (mouseout)="hideWarning('password-warning')" 
+    (focus)="showWarning('password-warning')" (blur)="hideWarning('password-warning')">
+    <div id="password-warning" class="hidden-warning" hidden="true">
+      <p id="warning-text">
         <br>
-        Creating a password is optional but advised, 
-        as certain features such as having your name on the leaderboard and 
-        picking up where you left off are only accessible to password-protected users.
-        <br><br>
-        However, if you choose to create a password, 
-        it is strongly suggested that you do not recycle any that you already use, 
+        When choosing a password, 
+        it is strongly suggested you <b>do not recycle any that you already use</b>, 
         as the passwords stored here are not completely secured.
       </p>
     </div>
-    <!-- <input id="hidden-token" type="hidden" name="t"> -->
-    <input id="submit-btn" type="submit" [disabled]="!loginForm.valid">
+    <input id="submit-btn" type="submit" [disabled]="!loginForm.valid || !canSubmit" value="Login">
+    <p>Or</p>
+    <input id="start-btn" type="submit" [disabled]="loginForm.valid || !canSubmit" value="Start without logging in"
+    (mouseover)="showWarning('start-warning')" (mouseout)="hideWarning('start-warning')" 
+    (focus)="showWarning('start-warning')" (blur)="hideWarning('start-warning')">
+    <div id="start-warning" class="hidden-warning" hidden="true">
+      <p class="warning-text">
+        <br>
+        Creating an account is optional but advised, 
+        as certain features such as having your name on the leaderboard, 
+        picking up where you left off and navigating between answered questions 
+        are only accessible to password-protected users.
+      </p>
+    </div>
   </form>
 </div>
