@@ -85,12 +85,21 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if(!this.canSubmit) return;
-    this.canSubmit = false;
-    let username = this.loginForm.get('username').value;
-    let hash = CryptoJS.SHA256(this.loginForm.get('password').value).toString();
+
+    const loginSuccess = () => {
+      this.canSubmit = true;
+      this.httpService.postAnswer(this.route.routeConfig.path).subscribe(res => {
+        localStorage.setItem('question', JSON.stringify(res));
+        this.router.navigate([`/${res.url}`]);
+      }, console.error);
+    }
+
+    if(!this.loginForm.valid) return loginSuccess();
 
     const loginFailed = err => {
       console.error(err);
+      this.loginForm.reset();
+      $('#username').focus();
       let button = $("#submit-btn");
       button.toggleClass('submit-error');
       setTimeout(() => {
@@ -99,20 +108,16 @@ export class LoginComponent implements OnInit {
       }, 1000);
     }
 
-    const loginSuccess = token => {
-      this.canSubmit = true;
-      localStorage.setItem('token', token);
-      this.httpService.postAnswer(this.route.routeConfig.path).subscribe(res => {
-        localStorage.setItem('question', JSON.stringify(res));
-        this.router.navigate([`/${res.url}`]);
-      }, console.error);
-    }
+    this.canSubmit = false;
+    let username = this.loginForm.get('username').value;
+    let hash = CryptoJS.SHA256(this.loginForm.get('password').value).toString();
 
     this.httpService.postLogin(username, hash).subscribe(res => {
-      this.loginForm.reset();
-      $('#username').focus();
       if(res.err || !res.token) loginFailed(res.err);
-      else loginSuccess(res.token);
+      else {
+        localStorage.setItem('token', res.token);
+        loginSuccess();
+      };
     }, loginFailed);
   }
 
