@@ -18,7 +18,7 @@
       </p>
     </div>
     <input id="submit-btn" type="submit" [disabled]="!loginForm.valid || !canSubmit" value="Login">
-    <p>Or</p>
+    <p style="margin-top: 8px">Or</p>
     <input id="start-btn" type="submit" [disabled]="loginForm.valid || !canSubmit" value="Start without logging in"
     (mouseover)="showWarning('start-warning')" (mouseout)="hideWarning('start-warning')" 
     (focus)="showWarning('start-warning')" (blur)="hideWarning('start-warning')">

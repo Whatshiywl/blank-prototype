@@ -22,9 +22,9 @@ export class QuestionGuard implements CanActivate {
             return false;
         }
         
-        let questionData = this.getQuestionData();
+        let token = this.getQuestionToken();
         let subject = new Subject<boolean>();
-        this.httpService.getValidateRoute(url, questionData.token).subscribe(res => {
+        this.httpService.getValidateRoute(url, token).subscribe(res => {
             if(res.success) subject.next(true);
             else reject();
         }, err => {
@@ -33,14 +33,15 @@ export class QuestionGuard implements CanActivate {
         return subject.asObservable();
     }
 
-    private getQuestionData() {
+    private getQuestionToken() {
         try {
             let questionData = JSON.parse(localStorage.getItem('question')) || {};
+            const token = questionData.token;
             delete questionData.token;
             localStorage.setItem('question', JSON.stringify(questionData));
-            return questionData;
+            return token;
         } catch (error) {
-            return {};
+            return '';
         }
     }
 }

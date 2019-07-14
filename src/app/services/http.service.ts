@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { environment } from '../../environments/environment';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +22,20 @@ export class HttpService {
   }
 
   getUserExists(username: string) {
-    return this.get(`user-exists?username=${username}`);
+    const query = {
+      username
+    };
+    return this.get(`user-exists`, query);
   }
 
   getValidateRoute(route: string, routeToken: string) {
     let token = localStorage.getItem('token');
-    return this.get(`validate-route?from=${route}&route-token=${routeToken}&token=${token}`);
+    const query = {
+      from: route,
+      'route-token': routeToken,
+      token
+    };
+    return this.get(`validate-route`, query);
   }
 
   postAnswer(from: string, answer?: string) {
@@ -38,12 +47,13 @@ export class HttpService {
     return this.post('login', {username, hash});
   }
 
-  private get(path: string, project?: (value: Response, index: number) => any) {
+  private get(path: string, params = {}, project?: (value: Response, index: number) => any) {
     let url = this.getURL(path);
-    return this.http.get(url).map(project || (res => res.json()));
+    params = _.pickBy(params, Boolean);
+    return this.http.get(url, {params}).map(project || (res => res.json()));
   }
 
-  private post(path: string, body: any, project?: (value: Response, index: number) => any) {
+  private post(path: string, body = {}, project?: (value: Response, index: number) => any) {
     let url = this.getURL(path);
     return this.http.post(url, body).map(project || (res => res.json()));
   }
