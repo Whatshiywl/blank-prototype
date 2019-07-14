@@ -109,8 +109,9 @@ export class LoginComponent implements OnInit {
     }
 
     this.canSubmit = false;
-    let username = this.loginForm.get('username').value;
-    let hash = CryptoJS.SHA256(this.loginForm.get('password').value).toString();
+    let username = this.loginForm.get('username').value.toLowerCase();
+    const password = this.loginForm.get('password').value;
+    let hash = password ? CryptoJS.SHA256(password).toString() : undefined;
 
     this.httpService.postLogin(username, hash).subscribe(res => {
       if(res.err || !res.token) loginFailed(res.err);
