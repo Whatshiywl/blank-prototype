@@ -14,7 +14,14 @@
     }
 }
 
-#password-warning {
+p {
+    font: inherit;
+    text-align: center;
+    word-wrap: normal;
+    padding: 0px;
+}
+
+.hidden-warning {
     background-color: orange;
     border: 1px solid darkgoldenrod;
     border-radius: 0px 0px 10px 10px;
@@ -24,16 +31,10 @@
 
     & p {
         padding-top: 10px;
+        text-align: inherit;
     }
 }
 
 form {
     opacity: 0;
-}
-
-p {
-    font: inherit;
-    text-align: inherit;
-    word-wrap: normal;
-    padding: 0px;
 }

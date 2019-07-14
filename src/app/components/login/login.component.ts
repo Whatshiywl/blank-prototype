@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       this.httpService.getUserExists(user).subscribe(data => {
         this.existanceData = data;
         if(this.existanceData.password) {
-          this.hideWarning();
+          this.hideWarning('password-warning');
           $('#password').prop('required', true);
           this.loginForm.get('password').setValidators(Validators.required);
           this.loginForm.get('password').updateValueAndValidity();
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
     });
 
     this.loginForm.get('password').valueChanges.subscribe(pass => {
-      if(pass) this.hideWarning();
+      if(pass) this.hideWarning('password-warning');
     });
 
     $('#username').focus();
@@ -74,23 +74,32 @@ export class LoginComponent implements OnInit {
 
   easeInAnimations() {
 
-    this.easyInShow('#welcome-0', 1500, 2000);
-    this.easyInShow('#welcome-1', 2000, 2000);
-    this.easyInShow('#welcome-2', 2500, 2000);
-    this.easyInShow('#login-form', 4000, 4000, () => {
+    this.easyInShow('#welcome-0', 15, 20);
+    this.easyInShow('#welcome-1', 20, 20);
+    this.easyInShow('#welcome-2', 25, 20, () => {
       this.passWarningState = 'hidden';
     });
+    this.easyInShow('#login-form', 40, 40);
 
   }
 
   onSubmit() {
     if(!this.canSubmit) return;
-    this.canSubmit = false;
-    let username = this.loginForm.get('username').value;
-    let hash = CryptoJS.SHA256(this.loginForm.get('password').value).toString();
+
+    const loginSuccess = () => {
+      this.canSubmit = true;
+      this.httpService.postAnswer(this.route.routeConfig.path).subscribe(res => {
+        localStorage.setItem('question', JSON.stringify(res));
+        this.router.navigate([`/${res.url}`]);
+      }, console.error);
+    }
+
+    if(!this.loginForm.valid) return loginSuccess();
 
     const loginFailed = err => {
       console.error(err);
+      this.loginForm.reset();
+      $('#username').focus();
       let button = $("#submit-btn");
       button.toggleClass('submit-error');
       setTimeout(() => {
@@ -99,28 +108,25 @@ export class LoginComponent implements OnInit {
       }, 1000);
     }
 
-    const loginSuccess = token => {
-      this.canSubmit = true;
-      localStorage.setItem('token', token);
-      this.httpService.postAnswer(this.route.routeConfig.path).subscribe(res => {
-        localStorage.setItem('question', JSON.stringify(res));
-        this.router.navigate([`/${res.url}`]);
-      }, console.error);
-    }
+    this.canSubmit = false;
+    let username = this.loginForm.get('username').value.toLowerCase();
+    const password = this.loginForm.get('password').value;
+    let hash = password ? CryptoJS.SHA256(password).toString() : undefined;
 
     this.httpService.postLogin(username, hash).subscribe(res => {
-      this.loginForm.reset();
-      $('#username').focus();
       if(res.err || !res.token) loginFailed(res.err);
-      else loginSuccess(res.token);
+      else {
+        localStorage.setItem('token', res.token);
+        loginSuccess();
+      };
     }, loginFailed);
   }
 
-  showWarning() {
+  showWarning(id: string) {
     if(this.passWarningState != 'hidden') return;
     if(this.existanceData.password) return;
     this.passWarningState = 'animating';
-    let id = '#password-warning';
+    id = `#${id}`;
     let warning = $(id);
     warning.css('height', '10px').show();
     let target = $(`${id} p`).outerHeight();
@@ -132,14 +138,15 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  hideWarning() {
+  hideWarning(id: string) {
     if(this.passWarningState != 'shown') return;
     this.passWarningState = 'animating';
-    $('#password-warning')
+    id = `#${id}`;
+    $(id)
     .animate({
       height: "10px"
     }, 600, 'swing', () => {
-      $('#password-warning').hide();
+      $(id).hide();
       this.passWarningState = 'hidden';
     });
   }
