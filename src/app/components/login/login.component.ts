@@ -74,12 +74,12 @@ export class LoginComponent implements OnInit {
 
   easeInAnimations() {
 
-    this.easyInShow('#welcome-0', 15, 20);
-    this.easyInShow('#welcome-1', 20, 20);
-    this.easyInShow('#welcome-2', 25, 20, () => {
+    this.easyInShow('#welcome-0', 1500, 800); 
+    this.easyInShow('#welcome-1', 1800, 800);
+    this.easyInShow('#welcome-2', 2100, 800, () => {
       this.passWarningState = 'hidden';
     });
-    this.easyInShow('#login-form', 40, 40);
+    this.easyInShow('#login-form', 3000, 2000);
 
   }
 

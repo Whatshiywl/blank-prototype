@@ -39,7 +39,7 @@ export class LeaderboardComponent implements OnInit {
       $('#leaderboard-wrapper').animate({
         opacity: 1
       }, 2000, 'swing');
-    }, 5000);
+    }, 3000);
 
   }
 
