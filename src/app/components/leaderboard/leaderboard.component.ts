@@ -42,7 +42,7 @@ export class LeaderboardComponent implements OnInit {
   }
 
   mapToLocalTime(time: string) {
-    return moment.utc(time, 'DD/MM/YYYY HH:mm:ss').local().format('DD/MM/YYYY HH:mm:ss');
+    return moment.utc(time, 'DD/MM/YYYY HH:mm:ss').local().format('YYYY/MM/DD HH:mm:ss');
   }
 
 }
