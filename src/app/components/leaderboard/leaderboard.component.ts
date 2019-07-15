@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LeaderboardService } from 'src/app/services/leaderboardService/leaderboard.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-leaderboard',
@@ -38,6 +39,10 @@ export class LeaderboardComponent implements OnInit {
       }, 2000, 'swing');
     }, 3000);
 
+  }
+
+  mapToLocalTime(time: string) {
+    return moment.utc(time, 'DD/MM/YYYY HH:mm:ss').local().format('DD/MM/YYYY HH:mm:ss');
   }
 
 }
