@@ -4,13 +4,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { HttpService } from './services/http.service';
+import { HttpService } from './services/httpService/http.service';
 import { HttpModule } from '@angular/http';
 import { QuestionComponent } from './components/question/question.component';
 import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
-import { UrlSerializer } from '@angular/router';
-import { CustomUrlSerializer } from './custom-url-serializer.service';
 import { QuestionGuard } from './components/question/question.guard';
+import { LeaderboardService } from './services/leaderboardService/leaderboard.service';
 
 @NgModule({
   declarations: [
@@ -28,11 +27,8 @@ import { QuestionGuard } from './components/question/question.guard';
   ],
   providers: [
     HttpService,
+    LeaderboardService,
     QuestionGuard
-    // {
-    //   provide: UrlSerializer,
-    //   useClass: CustomUrlSerializer
-    // }
   ],
   bootstrap: [AppComponent]
 })

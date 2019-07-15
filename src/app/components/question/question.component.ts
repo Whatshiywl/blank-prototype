@@ -3,8 +3,9 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { routerNgProbeToken } from '@angular/router/src/router_module';
 
 import * as _ from 'lodash';
-import { HttpService } from 'src/app/services/http.service';
+import { HttpService } from 'src/app/services/httpService/http.service';
 import { FormBuilder } from '@angular/forms';
+import { LeaderboardService } from 'src/app/services/leaderboardService/leaderboard.service';
 
 @Component({
   selector: 'app-question',
@@ -25,7 +26,8 @@ export class QuestionComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private httpService: HttpService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private leaderboardService: LeaderboardService
   ) { }
 
   ngOnInit() {
@@ -54,6 +56,8 @@ export class QuestionComponent implements OnInit {
         this.router.navigate(['/login']);
       });
     }
+
+    this.leaderboardService.update();
 
     $('#answer').focus();
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpService } from 'src/app/services/http.service';
+import { LeaderboardService } from 'src/app/services/leaderboardService/leaderboard.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -23,17 +23,14 @@ export class LeaderboardComponent implements OnInit {
   };
 
   constructor(
-    private httpService: HttpService
+    private leaderboardService: LeaderboardService
   ) { }
 
   ngOnInit() {
-    console.log('leader init')
-    this.httpService.getLeaderboard().subscribe(leaderboard => {
+    this.leaderboardService.onUpdate$().subscribe(leaderboard => {
       this.leaderboard = leaderboard;
-    }, err => {
-      console.error(err);
-      alert('Error loading leaderboard!');
     });
+    this.leaderboardService.update();
 
     setTimeout(() => {
       $('#leaderboard-wrapper').animate({

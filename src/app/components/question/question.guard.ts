@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
-import { HttpService } from 'src/app/services/http.service';
+import { HttpService } from 'src/app/services/httpService/http.service';
 import { Subject } from 'rxjs';
 import * as _ from 'lodash';
 
